@@ -56,6 +56,9 @@
                             <?php endif; ?>
                         <?php else: ?>
                             <li class="nav-item">
+                                <a class="nav-link" href="<?php echo e(route('posts.index')); ?>">Home</a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link" href="<?php echo e(route('messages.index')); ?>"><?php echo e(__('Messages')); ?></a>
                             </li>
                             <li class="nav-item dropdown">
@@ -72,18 +75,15 @@
                                         <?php echo e(__('Logout')); ?>
 
                                     </a>
+                                    <a class="dropdown-item" href="<?php echo e(route('users.show', ['userId' => Auth::user()->id])); ?>">
+                                        <?php echo e(__('Profile')); ?>
+
+                                    </a>
 
                                     <form id="logout-form" action="<?php echo e(route('logout')); ?>" method="POST" class="d-none">
                                         <?php echo csrf_field(); ?>
                                     </form>
                                 </div>
-                            </li>
-
-                            <li class="nav-item">
-                                <a class="nav-link" href="<?php echo e(route('users.show', ['userId' => Auth::user()->id])); ?>">
-                                    <?php echo e(__('Profile')); ?>
-
-                                </a>
                             </li>
                         <?php endif; ?>
                     </ul>

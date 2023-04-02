@@ -15,6 +15,7 @@
                     <div class="card-body">
                         <img style="width: 300px" src="{{ asset($post->image) }}" alt="{{ $post->user->name }}'s post">
                         <h5 class="card-title">{{ $post->title }}</h5>
+                        <a href="{{ route('posts.show', $post->id) }}" class="btn btn-primary">View post</a>
                         <p class="card-text">{{ $post->body }}</p>
                         <a href="{{ route('posts.edit', $post->id) }}" class="btn btn-primary">Edit</a>
                         <form method="POST" action="{{ route('posts.destroy', $post->id) }}" class="d-inline">

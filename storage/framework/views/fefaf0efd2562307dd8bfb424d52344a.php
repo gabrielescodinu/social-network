@@ -8,6 +8,8 @@
                             <img style="width: 300px" src="<?php echo e(asset($post->image)); ?>" alt="<?php echo e($post->user->name); ?>'s post">
                             <h5 class="card-title"><?php echo e($post->user->name); ?></h5>
                             <p class="card-text"><?php echo e($post->body); ?></p>
+                            <a href="<?php echo e(route('users.show', $post->user->id)); ?>">Profilo di <?php echo e($post->user->name); ?></a>
+                            <br>
                             <div class="btn-group">
                                 <button class="btn btn-primary like-button" data-post-id="<?php echo e($post->id); ?>">Like</button>
                                 <button class="btn btn-danger dislike-button"

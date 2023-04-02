@@ -55,6 +55,9 @@
                             @endif
                         @else
                             <li class="nav-item">
+                                <a class="nav-link" href="{{ route('posts.index') }}">Home</a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link" href="{{ route('messages.index') }}">{{ __('Messages') }}</a>
                             </li>
                             <li class="nav-item dropdown">
@@ -69,17 +72,14 @@
                                                      document.getElementById('logout-form').submit();">
                                         {{ __('Logout') }}
                                     </a>
+                                    <a class="dropdown-item" href="{{ route('users.show', ['userId' => Auth::user()->id]) }}">
+                                        {{ __('Profile') }}
+                                    </a>
 
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                         @csrf
                                     </form>
                                 </div>
-                            </li>
-
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('users.show', ['userId' => Auth::user()->id]) }}">
-                                    {{ __('Profile') }}
-                                </a>
                             </li>
                         @endguest
                     </ul>

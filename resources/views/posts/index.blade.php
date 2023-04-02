@@ -10,6 +10,8 @@
                             <img style="width: 300px" src="{{ asset($post->image) }}" alt="{{ $post->user->name }}'s post">
                             <h5 class="card-title">{{ $post->user->name }}</h5>
                             <p class="card-text">{{ $post->body }}</p>
+                            <a href="{{ route('users.show', $post->user->id) }}">Profilo di {{ $post->user->name }}</a>
+                            <br>
                             <div class="btn-group">
                                 <button class="btn btn-primary like-button" data-post-id="{{ $post->id }}">Like</button>
                                 <button class="btn btn-danger dislike-button"

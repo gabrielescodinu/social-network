@@ -13,6 +13,7 @@
                     <div class="card-body">
                         <img style="width: 300px" src="<?php echo e(asset($post->image)); ?>" alt="<?php echo e($post->user->name); ?>'s post">
                         <h5 class="card-title"><?php echo e($post->title); ?></h5>
+                        <a href="<?php echo e(route('posts.show', $post->id)); ?>" class="btn btn-primary">View post</a>
                         <p class="card-text"><?php echo e($post->body); ?></p>
                         <a href="<?php echo e(route('posts.edit', $post->id)); ?>" class="btn btn-primary">Edit</a>
                         <form method="POST" action="<?php echo e(route('posts.destroy', $post->id)); ?>" class="d-inline">

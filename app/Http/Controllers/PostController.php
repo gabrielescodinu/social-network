@@ -83,24 +83,24 @@ class PostController extends Controller
     {
         // Recupera il post
         $post = Post::findOrFail($id);
-    
+
         // Verifica se l'utente autenticato è lo stesso che ha creato il post
         if (auth()->user()->id !== $post->user_id) {
             abort(403, 'Unauthorized action.');
         }
-    
+
         // Elimina l'immagine associata al post
-        if ($post->image) { // Assumendo che 'image' sia il nome dell'attributo che contiene il percorso dell'immagine nel tuo modello Post
-            Storage::delete($post->image);
+        if ($post->image) {
+            Storage::delete(str_replace('storage/', 'public/', $post->image));
         }
-    
+
         // Elimina il post
         $post->delete();
-    
+
         // Redirect alla pagina dei post
         return redirect()->route('posts.index');
     }
-    
+
 
     public function showProfile($userId)
     {
@@ -120,23 +120,23 @@ class PostController extends Controller
     public function like(Post $post)
     {
         $user = auth()->user();
-    
+
         // verifica se l'utente ha già messo un like al post
         $existingLike = $user->likes()->where('post_id', $post->id)->first();
-    
+
         // se l'utente ha già messo un like al post, restituisci un errore
         if ($existingLike && $existingLike->pivot->type === 'like') {
             return response()->json(['error' => 'User already liked this post.'], 403);
         }
-    
+
         // aggiungi il like
         $user->likes()->syncWithoutDetaching([$post->id => ['type' => 'like']]);
-    
+
         // restituisci il numero totale di like del post
         $totalLikes = $post->likes()->where('type', 'like')->count();
         return response()->json(['total_likes' => $totalLikes]);
     }
-    
+
 
     public function dislike(Post $post)
     {
