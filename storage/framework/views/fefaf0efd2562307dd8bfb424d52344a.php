@@ -11,9 +11,13 @@
                             <a href="<?php echo e(route('users.show', $post->user->id)); ?>">Profilo di <?php echo e($post->user->name); ?></a>
                             <br>
                             <div class="btn-group">
-                                <button class="btn btn-primary like-button" data-post-id="<?php echo e($post->id); ?>">Like</button>
-                                <button class="btn btn-danger dislike-button"
-                                    data-post-id="<?php echo e($post->id); ?>">Dislike</button>
+                                <?php if(auth()->user()->likes()->where('post_id', $post->id)->exists()): ?>
+                                    <button class="btn btn-primary like-button d-none" data-post-id="<?php echo e($post->id); ?>">Like</button>
+                                    <button class="btn btn-danger dislike-button" data-post-id="<?php echo e($post->id); ?>">Dislike</button>
+                                <?php else: ?>
+                                    <button class="btn btn-primary like-button" data-post-id="<?php echo e($post->id); ?>">Like</button>
+                                    <button class="btn btn-danger dislike-button d-none" data-post-id="<?php echo e($post->id); ?>">Dislike</button>
+                                <?php endif; ?>
                             </div>
                             <p class="card-text"><?php echo e($post->likes()->count()); ?> likes</p>
                             <a href="<?php echo e(route('posts.show', $post->id)); ?>" class="btn btn-primary">View post</a>
@@ -78,6 +82,8 @@
 
             $(this).click(function() {
                 addLike(postId);
+                $(this).addClass('d-none');
+                $(this).siblings('.dislike-button').removeClass('d-none');
                 console.log('Like button clicked');
             });
         });
@@ -87,6 +93,8 @@
 
             $(this).click(function() {
                 removeLike(postId);
+                $(this).addClass('d-none');
+                $(this).siblings('.like-button').removeClass('d-none');
             });
         });
     });
