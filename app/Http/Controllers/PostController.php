@@ -143,6 +143,8 @@ class PostController extends Controller
         $user = auth()->user();
         $user->likes()->detach($post->id);
 
-        return back();
+        // restituisci il numero totale di like del post
+        $totalLikes = $post->likes()->where('type', 'like')->count();
+        return response()->json(['total_likes' => $totalLikes]);
     }
 }

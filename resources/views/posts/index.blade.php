@@ -14,11 +14,15 @@
                             <br>
                             <div class="btn-group">
                                 @if (auth()->user()->likes()->where('post_id', $post->id)->exists())
-                                    <button class="btn btn-primary like-button d-none" data-post-id="{{ $post->id }}">Like</button>
-                                    <button class="btn btn-danger dislike-button" data-post-id="{{ $post->id }}">Dislike</button>
+                                    <button class="btn btn-primary like-button d-none"
+                                        data-post-id="{{ $post->id }}">Like</button>
+                                    <button class="btn btn-danger dislike-button"
+                                        data-post-id="{{ $post->id }}">Dislike</button>
                                 @else
-                                    <button class="btn btn-primary like-button" data-post-id="{{ $post->id }}">Like</button>
-                                    <button class="btn btn-danger dislike-button d-none" data-post-id="{{ $post->id }}">Dislike</button>
+                                    <button class="btn btn-primary like-button"
+                                        data-post-id="{{ $post->id }}">Like</button>
+                                    <button class="btn btn-danger dislike-button d-none"
+                                        data-post-id="{{ $post->id }}">Dislike</button>
                                 @endif
                             </div>
                             <p class="card-text">{{ $post->likes()->count() }} likes</p>
@@ -46,21 +50,24 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
+
+        // Aggiorna il conteggio dei likes per un determinato post
+        function updateLikeCount(postId, count) {
+            $('button[data-post-id="' + postId + '"]').parent().siblings('.card-text').text(count + ' likes');
+        }
+
         // Aggiunge un like al post corrispondente
         function addLike(postId) {
-            $.ajax({
-                url: '/posts/' + postId + '/like',
-                type: 'POST',
-                data: {
+            axios.post('/posts/' + postId + '/like', {
                     _token: '{{ csrf_token() }}'
-                },
-                success: function(response) {
-                    console.log(response);
-                },
-                error: function(xhr, status, error) {
-                    console.log(xhr.responseText);
-                }
-            });
+                })
+                .then(response => {
+                    console.log(response.data);
+                    updateLikeCount(postId, response.data.total_likes);
+                })
+                .catch(error => {
+                    console.log(error);
+                });
         }
 
         // Rimuove un like dal post corrispondente
@@ -72,6 +79,7 @@
                 })
                 .then(response => {
                     console.log(response.data);
+                    updateLikeCount(postId, response.data.total_likes);
                 })
                 .catch(error => {
                     console.log(error);
