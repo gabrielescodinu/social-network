@@ -6,16 +6,23 @@
             <div class="col-md-4">
                 <!-- Mostra i dettagli dell'utente -->
                 <h1>{{ $user->name }}</h1>
-                <img src="{{ $user->profile_image }}" alt="Profile Image">
+                @if ($user->image)
+                    <img src="{{ asset($user->image) }}" class="img-fluid">
+                @endif
                 <p>Followers: <span class="followers-count">{{ $user->followers_count }}</span></p>
                 <!-- Altri dettagli dell'utente -->
                 @if (!auth()->user()->isFollowing($user))
                     <button class="btn btn-primary follow-button" data-user-id="{{ $user->id }}">Follow</button>
-                    <button class="btn btn-danger unfollow-button d-none" data-user-id="{{ $user->id }}">Unfollow</button>
+                    <button class="btn btn-danger unfollow-button d-none"
+                        data-user-id="{{ $user->id }}">Unfollow</button>
                 @endif
                 @if (auth()->user()->isFollowing($user))
                     <button class="btn btn-primary follow-button d-none" data-user-id="{{ $user->id }}">Follow</button>
                     <button class="btn btn-danger unfollow-button" data-user-id="{{ $user->id }}">Unfollow</button>
+                @endif
+                <!-- Mostra il pulsante di modifica profilo solo se l'utente corrente è il proprietario del profilo -->
+                @if ($user->id == auth()->user()->id)
+                    <a href="{{ route('users.edit', $user->id) }}" class="btn btn-primary">Edit Profile</a>
                 @endif
             </div>
             <div class="col-md-8">
@@ -56,7 +63,8 @@
                 success: function(response) {
                     console.log(response);
                     $('.follow-button[data-user-id="' + userId + '"]').addClass('d-none');
-                    $('.unfollow-button[data-user-id="' + userId + '"]').removeClass('d-none');
+                    $('.unfollow-button[data-user-id="' + userId + '"]').removeClass(
+                        'd-none');
                     const followersCount = $('.followers-count').text();
                     $('.followers-count').text(parseInt(followersCount) + 1);
                 },
@@ -77,7 +85,8 @@
                 success: function(response) {
                     console.log(response);
                     $('.unfollow-button[data-user-id="' + userId + '"]').addClass('d-none');
-                    $('.follow-button[data-user-id="' + userId + '"]').removeClass('d-none');
+                    $('.follow-button[data-user-id="' + userId + '"]').removeClass(
+                    'd-none');
                     const followersCount = $('.followers-count').text();
                     $('.followers-count').text(parseInt(followersCount) - 1);
                 },

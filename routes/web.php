@@ -37,10 +37,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/posts/{post}/edit', [PostController::class, 'edit'])->name('posts.edit');
     Route::patch('/posts/{post}', [PostController::class, 'update'])->name('posts.update');
     Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
-    Route::get('/users/{userId}', [UserController::class, 'showProfile'])->name('users.show');
     Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show');
     Route::post('/comments/{postId}', [CommentController::class, 'store'])->name('comments.store');
-
+    
+    Route::get('/users/{userId}', [UserController::class, 'showProfile'])->name('users.show');
+    Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
+    Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
     Route::post('/users/{user}/follow', [UserController::class, 'follow'])->name('users.follow');
     Route::post('/users/{user}/unfollow', [UserController::class, 'unfollow'])->name('users.unfollow');
 });
