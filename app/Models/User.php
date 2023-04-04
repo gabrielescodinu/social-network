@@ -52,4 +52,19 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Post::class, 'post_user_likes')->withPivot('type')->withTimestamps();
     }
+
+    public function followers()
+    {
+        return $this->belongsToMany(User::class, 'followers', 'user_id', 'follower_id')->withTimestamps();
+    }
+
+    public function following()
+    {
+        return $this->belongsToMany(User::class, 'followers', 'follower_id', 'user_id')->withTimestamps();
+    }
+
+    public function isFollowing(User $user)
+    {
+        return $this->following->contains($user);
+    }
 }

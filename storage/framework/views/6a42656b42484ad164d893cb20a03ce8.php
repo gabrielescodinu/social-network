@@ -5,7 +5,16 @@
                 <!-- Mostra i dettagli dell'utente -->
                 <h1><?php echo e($user->name); ?></h1>
                 <img src="<?php echo e($user->profile_image); ?>" alt="Profile Image">
+                <p>Followers: <span class="followers-count"><?php echo e($user->followers_count); ?></span></p>
                 <!-- Altri dettagli dell'utente -->
+                <?php if(!auth()->user()->isFollowing($user)): ?>
+                    <button class="btn btn-primary follow-button" data-user-id="<?php echo e($user->id); ?>">Follow</button>
+                    <button class="btn btn-danger unfollow-button d-none" data-user-id="<?php echo e($user->id); ?>">Unfollow</button>
+                <?php endif; ?>
+                <?php if(auth()->user()->isFollowing($user)): ?>
+                    <button class="btn btn-primary follow-button d-none" data-user-id="<?php echo e($user->id); ?>">Follow</button>
+                    <button class="btn btn-danger unfollow-button" data-user-id="<?php echo e($user->id); ?>">Unfollow</button>
+                <?php endif; ?>
             </div>
             <div class="col-md-8">
                 <!-- Mostra i post dell'utente -->
@@ -29,5 +38,71 @@
         </div>
     </div>
 <?php $__env->stopSection(); ?>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('.follow-button').click(function() {
+            const userId = $(this).data('user-id');
+            $.ajax({
+                url: '/users/' + userId + '/follow',
+                type: 'POST',
+                data: {
+                    _token: '<?php echo e(csrf_token()); ?>'
+                },
+                success: function(response) {
+                    console.log(response);
+                    $('.follow-button[data-user-id="' + userId + '"]').addClass('d-none');
+                    $('.unfollow-button[data-user-id="' + userId + '"]').removeClass('d-none');
+                    const followersCount = $('.followers-count').text();
+                    $('.followers-count').text(parseInt(followersCount) + 1);
+                },
+                error: function(xhr, status, error) {
+                    console.log(xhr.responseText);
+                }
+            });
+        });
+
+        $('.unfollow-button').click(function() {
+            const userId = $(this).data('user-id');
+            $.ajax({
+                url: '/users/' + userId + '/unfollow',
+                type: 'POST',
+                data: {
+                    _token: '<?php echo e(csrf_token()); ?>'
+                },
+                success: function(response) {
+                    console.log(response);
+                    $('.unfollow-button[data-user-id="' + userId + '"]').addClass('d-none');
+                    $('.follow-button[data-user-id="' + userId + '"]').removeClass('d-none');
+                    const followersCount = $('.followers-count').text();
+                    $('.followers-count').text(parseInt(followersCount) - 1);
+                },
+                error: function(xhr, status, error) {
+                    console.log(xhr.responseText);
+                }
+            });
+        });
+
+        function followUser(userId) {
+            $.ajax({
+                url: '/follow/' + userId,
+                type: 'POST',
+                data: {
+                    _token: '<?php echo e(csrf_token()); ?>'
+                },
+                success: function(response) {
+                    console.log(response);
+                    // aggiorna la vista del profilo
+                    refreshProfileView(userId);
+                },
+                error: function(xhr, status, error) {
+                    console.log(xhr.responseText);
+                }
+            });
+        }
+    });
+</script>
 
 <?php echo $__env->make('layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH /Users/gabrielescodinu/Documents/GitHub/social-network/resources/views/users/show.blade.php ENDPATH**/ ?>

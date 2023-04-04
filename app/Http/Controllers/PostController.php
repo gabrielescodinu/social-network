@@ -102,20 +102,7 @@ class PostController extends Controller
     }
 
 
-    public function showProfile($userId)
-    {
-        // Recupera i posts dell'utente con l'id specificato
-        $userPosts = Post::where('user_id', $userId)->orderBy('created_at', 'desc')->get();
 
-        // Recupera l'utente con l'id specificato
-        $user = User::find($userId);
-
-        // Passa i dati alla vista della pagina del profilo
-        return view('users.show', [
-            'user' => $user,
-            'userPosts' => $userPosts,
-        ]);
-    }
 
     public function like(Post $post)
     {

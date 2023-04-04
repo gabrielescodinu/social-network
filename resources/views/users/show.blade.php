@@ -7,7 +7,16 @@
                 <!-- Mostra i dettagli dell'utente -->
                 <h1>{{ $user->name }}</h1>
                 <img src="{{ $user->profile_image }}" alt="Profile Image">
+                <p>Followers: <span class="followers-count">{{ $user->followers_count }}</span></p>
                 <!-- Altri dettagli dell'utente -->
+                @if (!auth()->user()->isFollowing($user))
+                    <button class="btn btn-primary follow-button" data-user-id="{{ $user->id }}">Follow</button>
+                    <button class="btn btn-danger unfollow-button d-none" data-user-id="{{ $user->id }}">Unfollow</button>
+                @endif
+                @if (auth()->user()->isFollowing($user))
+                    <button class="btn btn-primary follow-button d-none" data-user-id="{{ $user->id }}">Follow</button>
+                    <button class="btn btn-danger unfollow-button" data-user-id="{{ $user->id }}">Unfollow</button>
+                @endif
             </div>
             <div class="col-md-8">
                 <!-- Mostra i post dell'utente -->
@@ -31,3 +40,69 @@
         </div>
     </div>
 @endsection
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('.follow-button').click(function() {
+            const userId = $(this).data('user-id');
+            $.ajax({
+                url: '/users/' + userId + '/follow',
+                type: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    console.log(response);
+                    $('.follow-button[data-user-id="' + userId + '"]').addClass('d-none');
+                    $('.unfollow-button[data-user-id="' + userId + '"]').removeClass('d-none');
+                    const followersCount = $('.followers-count').text();
+                    $('.followers-count').text(parseInt(followersCount) + 1);
+                },
+                error: function(xhr, status, error) {
+                    console.log(xhr.responseText);
+                }
+            });
+        });
+
+        $('.unfollow-button').click(function() {
+            const userId = $(this).data('user-id');
+            $.ajax({
+                url: '/users/' + userId + '/unfollow',
+                type: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    console.log(response);
+                    $('.unfollow-button[data-user-id="' + userId + '"]').addClass('d-none');
+                    $('.follow-button[data-user-id="' + userId + '"]').removeClass('d-none');
+                    const followersCount = $('.followers-count').text();
+                    $('.followers-count').text(parseInt(followersCount) - 1);
+                },
+                error: function(xhr, status, error) {
+                    console.log(xhr.responseText);
+                }
+            });
+        });
+
+        function followUser(userId) {
+            $.ajax({
+                url: '/follow/' + userId,
+                type: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    console.log(response);
+                    // aggiorna la vista del profilo
+                    refreshProfileView(userId);
+                },
+                error: function(xhr, status, error) {
+                    console.log(xhr.responseText);
+                }
+            });
+        }
+    });
+</script>
