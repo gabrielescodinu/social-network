@@ -10,6 +10,8 @@
                     <img src="{{ asset($user->image) }}" class="img-fluid">
                 @endif
                 <p>Followers: <span class="followers-count">{{ $user->followers_count }}</span></p>
+                <a href="{{ route('users.followers', $user->id) }}">Followers</a>
+
                 <!-- Altri dettagli dell'utente -->
                 @if (!auth()->user()->isFollowing($user))
                     <button class="btn btn-primary follow-button" data-user-id="{{ $user->id }}">Follow</button>

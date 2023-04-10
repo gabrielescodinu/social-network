@@ -39,12 +39,14 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
     Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show');
     Route::post('/comments/{postId}', [CommentController::class, 'store'])->name('comments.store');
+    Route::get('/explorer', [PostController::class, 'explorer'])->name('posts.explorer');
     
     Route::get('/users/{userId}', [UserController::class, 'showProfile'])->name('users.show');
     Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
     Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
     Route::post('/users/{user}/follow', [UserController::class, 'follow'])->name('users.follow');
     Route::post('/users/{user}/unfollow', [UserController::class, 'unfollow'])->name('users.unfollow');
+    Route::get('/users/{userId}/followers', [UserController::class, 'showFollowers'])->name('users.followers');
 });
 
 Route::middleware('auth')->group(function () {

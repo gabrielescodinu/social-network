@@ -51,17 +51,6 @@ class MessageController extends Controller
 
         $recipient = User::find($validatedData['recipient_id']);
 
-        if ($recipient->isOnline()) {
-            broadcast(new NewMessage($recipient))->toOthers();
-
-            $recipient->notify([
-                'title' => 'Nuovo messaggio',
-                'text' => 'Hai ricevuto un nuovo messaggio!',
-                'duration' => 5000
-            ]);
-        }
-
-
         return redirect()->route('messages.index')->with('success', 'Message sent successfully.');
     }
 

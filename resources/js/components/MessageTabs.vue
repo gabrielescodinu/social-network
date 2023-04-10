@@ -36,7 +36,8 @@ export default {
     },
     data() {
         return {
-            activeTab: 0
+            activeTab: 0,
+            messages: []
         }
     },
     methods: {
@@ -45,6 +46,12 @@ export default {
                 return message.sender_id === user.id || message.recipient_id === user.id;
             });
         }
+    },
+    mounted() {
+        window.Echo.channel('messages')
+            .listen('.MessageSent', (e) => {
+                this.messages.push(e.message);
+            });
     }
 }
 </script>

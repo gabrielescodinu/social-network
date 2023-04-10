@@ -1,46 +1,37 @@
-@extends('layouts.app')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
     <div class="container">
         <div class="row">
-            <div class="col-md-8">
-                @foreach ($posts as $post)
+            <div class="">
+                <?php $__currentLoopData = $posts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $post): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <div class="card my-3">
                         <div class="card-body">
-                            <img style="width: 300px" src="{{ asset($post->image) }}" alt="{{ $post->user->name }}'s post">
-                            <h5 class="card-title">{{ $post->user->name }}</h5>
-                            <p class="card-text">{{ $post->body }}</p>
-                            <a href="{{ route('users.show', $post->user->id) }}">Profilo di {{ $post->user->name }}</a>
+                            <img style="width: 300px" src="<?php echo e(asset($post->image)); ?>" alt="<?php echo e($post->user->name); ?>'s post">
+                            <h5 class="card-title"><?php echo e($post->user->name); ?></h5>
+                            <p class="card-text"><?php echo e($post->body); ?></p>
+                            <a href="<?php echo e(route('users.show', $post->user->id)); ?>">Profilo di <?php echo e($post->user->name); ?></a>
                             <br>
                             <div class="btn-group">
-                                @if (auth()->user()->likes()->where('post_id', $post->id)->exists())
+                                <?php if(auth()->user()->likes()->where('post_id', $post->id)->exists()): ?>
                                     <button class="btn btn-primary like-button d-none"
-                                        data-post-id="{{ $post->id }}">Like</button>
+                                        data-post-id="<?php echo e($post->id); ?>">Like</button>
                                     <button class="btn btn-danger dislike-button"
-                                        data-post-id="{{ $post->id }}">Dislike</button>
-                                @else
+                                        data-post-id="<?php echo e($post->id); ?>">Dislike</button>
+                                <?php else: ?>
                                     <button class="btn btn-primary like-button"
-                                        data-post-id="{{ $post->id }}">Like</button>
+                                        data-post-id="<?php echo e($post->id); ?>">Like</button>
                                     <button class="btn btn-danger dislike-button d-none"
-                                        data-post-id="{{ $post->id }}">Dislike</button>
-                                @endif
+                                        data-post-id="<?php echo e($post->id); ?>">Dislike</button>
+                                <?php endif; ?>
                             </div>
-                            <p class="card-text likes">{{ $post->likes()->count() }} likes</p>
-                            <a href="{{ route('posts.show', $post->id) }}" class="btn btn-primary">View post</a>
+                            <p class="card-text likes"><?php echo e($post->likes()->count()); ?> likes</p>
+                            <a href="<?php echo e(route('posts.show', $post->id)); ?>" class="btn btn-primary">View post</a>
                         </div>
                     </div>
-                @endforeach
-            </div>
-            <div class="col-md-4">
-                <div class="card my-3">
-                    <div class="card-body">
-                        <a href="{{ route('posts.create') }}" class="btn btn-primary btn-block">Create a new post</a>
-                    </div>
-                </div>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </div>
         </div>
     </div>
-@endsection
+<?php $__env->stopSection(); ?>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
@@ -59,7 +50,7 @@
         // Aggiunge un like al post corrispondente
         function addLike(postId) {
             axios.post('/posts/' + postId + '/like', {
-                    _token: '{{ csrf_token() }}'
+                    _token: '<?php echo e(csrf_token()); ?>'
                 })
                 .then(response => {
                     console.log(response.data);
@@ -74,7 +65,7 @@
         function removeLike(postId) {
             axios.delete('/posts/' + postId + '/dislike', {
                     data: {
-                        _token: '{{ csrf_token() }}'
+                        _token: '<?php echo e(csrf_token()); ?>'
                     }
                 })
                 .then(response => {
@@ -109,3 +100,5 @@
         });
     });
 </script>
+
+<?php echo $__env->make('layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH /Users/gabrielescodinu/Documents/GitHub/social-network/resources/views/posts/explorer.blade.php ENDPATH**/ ?>

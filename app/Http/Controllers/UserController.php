@@ -88,4 +88,13 @@ class UserController extends Controller
         auth()->user()->decrement('following_count');
         return response()->json(['success' => true]);
     }
+
+    public function showFollowers($userId)
+    {
+        $user = User::find($userId);
+
+        $followers = $user->followers;
+
+        return view('users.followers', compact('user', 'followers'));
+    }
 }

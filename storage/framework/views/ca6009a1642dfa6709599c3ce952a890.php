@@ -67,6 +67,9 @@
                             <?php endif; ?>
                         <?php else: ?>
                             <li class="nav-item">
+                                <a class="nav-link" href="<?php echo e(route('posts.explorer')); ?>">Explorer</a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link" href="<?php echo e(route('posts.index')); ?>">Home</a>
                             </li>
                             <li class="nav-item">

@@ -23,7 +23,7 @@
                                         data-post-id="<?php echo e($post->id); ?>">Dislike</button>
                                 <?php endif; ?>
                             </div>
-                            <p class="card-text"><?php echo e($post->likes()->count()); ?> likes</p>
+                            <p class="card-text likes"><?php echo e($post->likes()->count()); ?> likes</p>
                             <a href="<?php echo e(route('posts.show', $post->id)); ?>" class="btn btn-primary">View post</a>
                         </div>
                     </div>
@@ -51,7 +51,7 @@
 
         // Aggiorna il conteggio dei likes per un determinato post
         function updateLikeCount(postId, count) {
-            $('button[data-post-id="' + postId + '"]').parent().siblings('.card-text').text(count + ' likes');
+            $('button[data-post-id="' + postId + '"]').parent().siblings('.likes').text(count + ' likes');
         }
 
         // Aggiunge un like al post corrispondente

@@ -8,6 +8,8 @@
                     <img src="<?php echo e(asset($user->image)); ?>" class="img-fluid">
                 <?php endif; ?>
                 <p>Followers: <span class="followers-count"><?php echo e($user->followers_count); ?></span></p>
+                <a href="<?php echo e(route('users.followers', $user->id)); ?>">Followers</a>
+
                 <!-- Altri dettagli dell'utente -->
                 <?php if(!auth()->user()->isFollowing($user)): ?>
                     <button class="btn btn-primary follow-button" data-user-id="<?php echo e($user->id); ?>">Follow</button>

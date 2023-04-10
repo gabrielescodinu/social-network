@@ -66,6 +66,9 @@
                             @endif
                         @else
                             <li class="nav-item">
+                                <a class="nav-link" href="{{ route('posts.explorer') }}">Explorer</a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link" href="{{ route('posts.index') }}">Home</a>
                             </li>
                             <li class="nav-item">

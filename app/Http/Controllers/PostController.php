@@ -134,4 +134,16 @@ class PostController extends Controller
         $totalLikes = $post->likes()->where('type', 'like')->count();
         return response()->json(['total_likes' => $totalLikes]);
     }
+
+    public function explorer()
+    {
+        // Recupera gli utenti che segui
+        $following = auth()->user()->following()->pluck('id');
+
+        // Recupera i post degli utenti che segui
+        $posts = Post::whereIn('user_id', $following)->with('user')->latest()->paginate(10);
+
+        // Mostra la vista dei post degli utenti che segui
+        return view('posts.explorer', compact('posts'));
+    }
 }

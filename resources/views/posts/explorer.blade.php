@@ -3,7 +3,7 @@
 @section('content')
     <div class="container">
         <div class="row">
-            <div class="col-md-8">
+            <div class="">
                 @foreach ($posts as $post)
                     <div class="card my-3">
                         <div class="card-body">
@@ -30,13 +30,6 @@
                         </div>
                     </div>
                 @endforeach
-            </div>
-            <div class="col-md-4">
-                <div class="card my-3">
-                    <div class="card-body">
-                        <a href="{{ route('posts.create') }}" class="btn btn-primary btn-block">Create a new post</a>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
