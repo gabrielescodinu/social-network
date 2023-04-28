@@ -93,6 +93,8 @@
             const postId = $(this).data('post-id');
 
             $(this).click(function() {
+                console.log('ciao');
+
                 removeLike(postId);
                 $(this).addClass('d-none');
                 $(this).siblings('.like-button').removeClass('d-none');
